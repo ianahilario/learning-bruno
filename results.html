@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Would use latest version, you'd better specify a version -->
+    <script src="https://unpkg.com/naive-ui"></script>
+
+    <title>Bruno</title>
+    <style>
+      .error > .status {
+        color: red;
+      }
+      .success > .status {
+        color: green;
+      }
+
+      .n-collapse-item.success > .n-collapse-item__header {
+        background-color: rgba(237, 247, 242, 1);
+      }
+      .n-collapse-item.error > .n-collapse-item__header {
+        background-color: rgba(251, 238, 241, 1);
+      }
+
+      .min-width-150 {
+        min-width: 150px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <n-config-provider :theme="theme">
+        <n-layout embedded position="absolute" content-style="padding: 24px;">
+          <n-card>
+            <n-flex>
+              <n-page-header title="Bruno run dashboard">
+                <template #avatar>
+                  <n-avatar size="large" style="background-color: transparent">
+                    <svg id="emoji" width="34" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+                      <g id="color">
+                        <path
+                          fill="#F4AA41"
+                          stroke="none"
+                          d="M23.5,14.5855l-4.5,1.75l-7.25,8.5l-4.5,10.75l2,5.25c1.2554,3.7911,3.5231,7.1832,7.25,10l2.5-3.3333 c0,0,3.8218,7.7098,10.7384,8.9598c0,0,10.2616,1.936,15.5949-0.8765c3.4203-1.8037,4.4167-4.4167,4.4167-4.4167l3.4167-3.4167 l1.5833,2.3333l2.0833-0.0833l5.4167-7.25L64,37.3355l-0.1667-4.5l-2.3333-5.5l-4.8333-7.4167c0,0-2.6667-4.9167-8.1667-3.9167 c0,0-6.5-4.8333-11.8333-4.0833S32.0833,10.6688,23.5,14.5855z"
+                        ></path>
+                        <polygon
+                          fill="#EA5A47"
+                          stroke="none"
+                          points="36,47.2521 32.9167,49.6688 30.4167,49.6688 30.3333,53.5021 31.0833,57.0021 32.1667,58.9188 35,60.4188 39.5833,59.8355 41.1667,58.0855 42.1667,53.8355 41.9167,49.8355 39.9167,50.0855"
+                        ></polygon>
+                        <polygon
+                          fill="#3F3F3F"
+                          stroke="none"
+                          points="32.5,36.9188 30.9167,40.6688 33.0833,41.9188 34.3333,42.4188 38.6667,42.5855 41.5833,40.3355 39.8333,37.0855"
+                        ></polygon>
+                      </g>
+                      <g id="hair"></g>
+                      <g id="skin"></g>
+                      <g id="skin-shadow"></g>
+                      <g id="line">
+                        <path
+                          fill="#000000"
+                          stroke="none"
+                          d="M29.5059,30.1088c0,0-1.8051,1.2424-2.7484,0.6679c-0.9434-0.5745-1.2424-1.8051-0.6679-2.7484 s1.805-1.2424,2.7484-0.6679S29.5059,30.1088,29.5059,30.1088z"
+                        ></path>
+                        <path
+                          fill="none"
+                          stroke="#000000"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="10"
+                          stroke-width="2"
+                          d="M33.1089,37.006h6.1457c0.4011,0,0.7634,0.2397,0.9203,0.6089l1.1579,2.7245l-2.1792,1.1456 c-0.6156,0.3236-1.3654-0.0645-1.4567-0.754"
+                        ></path>
+                        <path
+                          fill="none"
+                          stroke="#000000"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="10"
+                          stroke-width="2"
+                          d="M34.7606,40.763c-0.1132,0.6268-0.7757,0.9895-1.3647,0.7471l-2.3132-0.952l1.0899-2.9035 c0.1465-0.3901,0.5195-0.6486,0.9362-0.6486"
+                        ></path>
+                        <path
+                          fill="none"
+                          stroke="#000000"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="10"
+                          stroke-width="2"
+                          d="M30.4364,50.0268c0,0-0.7187,8.7934,3.0072,9.9375c2.6459,0.8125,5.1497,0.5324,6.0625-0.25 c0.875-0.75,2.6323-4.4741,1.8267-9.6875"
+                        ></path>
+                        <path
+                          fill="#000000"
+                          stroke="none"
+                          d="M44.2636,30.1088c0,0,1.805,1.2424,2.7484,0.6679c0.9434-0.5745,1.2424-1.8051,0.6679-2.7484 c-0.5745-0.9434-1.805-1.2424-2.7484-0.6679C43.9881,27.9349,44.2636,30.1088,44.2636,30.1088z"
+                        ></path>
+                        <path
+                          fill="none"
+                          stroke="#000000"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="10"
+                          stroke-width="2"
+                          d="M25.6245,42.8393c-0.475,3.6024,2.2343,5.7505,4.2847,6.8414c1.1968,0.6367,2.6508,0.5182,3.7176-0.3181l2.581-2.0233l2.581,2.0233 c1.0669,0.8363,2.5209,0.9548,3.7176,0.3181c2.0504-1.0909,4.7597-3.239,4.2847-6.8414"
+                        ></path>
+                        <path
+                          fill="none"
+                          stroke="#000000"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="10"
+                          stroke-width="2"
+                          d="M19.9509,28.3572c-2.3166,5.1597-0.5084,13.0249,0.119,15.3759c0.122,0.4571,0.0755,0.9355-0.1271,1.3631l-1.9874,4.1937 c-0.623,1.3146-2.3934,1.5533-3.331,0.4409c-3.1921-3.7871-8.5584-11.3899-6.5486-16.686 c7.0625-18.6104,15.8677-18.1429,15.8677-18.1429c2.8453-1.9336,13.1042-6.9375,24.8125,0.875c0,0,8.6323-1.7175,14.9375,16.9375 c1.8036,5.3362-3.4297,12.8668-6.5506,16.6442c-0.9312,1.127-2.7162,0.8939-3.3423-0.4272l-1.9741-4.1656 c-0.2026-0.4275-0.2491-0.906-0.1271-1.3631c0.6275-2.3509,2.4356-10.2161,0.119-15.3759"
+                        ></path>
+                        <path
+                          fill="none"
+                          stroke="#000000"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="10"
+                          stroke-width="2"
+                          d="M52.6309,46.4628c0,0-3.0781,6.7216-7.8049,8.2712"
+                        ></path>
+                        <path
+                          fill="none"
+                          stroke="#000000"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="10"
+                          stroke-width="2"
+                          d="M19.437,46.969c0,0,3.0781,6.0823,7.8049,7.632"
+                        ></path>
+                        <line
+                          x1="36.2078"
+                          x2="36.2078"
+                          y1="47.3393"
+                          y2="44.3093"
+                          fill="none"
+                          stroke="#000000"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="10"
+                          stroke-width="2"
+                        ></line>
+                      </g>
+                    </svg>
+                  </n-avatar>
+                </template>
+                <template #extra>
+                  <n-flex justify="end">
+                    <n-switch v-model:value="darkMode" :rail-style="darkModeRailStyle">
+                      <template #checked> Dark </template>
+                      <template #unchecked> Light </template>
+                    </n-switch>
+                  </n-flex>
+                </template>
+              </n-page-header>
+              <n-tabs type="segment" animated>
+                <n-tab-pane name="summary" tab="Summary">
+                  <n-flex justify="center" vertical>
+                    <x-summary v-for="(result, index) in res" :res="result" :key="index"></x-summary>
+                  </n-flex>
+                </n-tab-pane>
+                <n-tab-pane name="Requests" tab="Requests">
+                  <n-flex justify="center" vertical>
+                    <x-requests v-for="(result, index) in res" :res="result" :key="index"></x-requests>
+                  </n-flex>
+                </n-tab-pane>
+              </n-tabs>
+            </n-flex>
+          </n-card>
+        </n-layout>
+      </n-config-provider>
+    </div>
+    <script type="text/x-template" id="summary-component">
+      <n-flex vertical style="margin-bottom: 50px;">
+        <n-card>
+          <template #header>
+            <span style="font-size: 24px;">{{ iterationTitle }}</span>
+          </template>
+          <n-flex justify="center">
+            <n-flex justify="center">
+              <n-alert type="success">
+                <n-statistic
+                  label="Total requests"
+                  :value="summaryTotalRequests"
+                >
+                </n-statistic>
+              </n-alert>
+              <n-alert :type="summaryErrors ? 'error' : 'success'">
+                <n-statistic label="Total errors" :value="summaryErrors">
+                </n-statistic>
+              </n-alert>
+              <n-alert type="success">
+                <n-statistic
+                  label="Total Controls"
+                  :value="summaryTotalControls"
+                >
+                </n-statistic>
+              </n-alert>
+              <n-alert :type="summaryFailedControls ? 'error' : 'success'">
+                <n-statistic
+                  label="Total Failed Controls"
+                  :value="summaryFailedControls"
+                >
+                </n-statistic>
+              </n-alert>
+              <n-statistic
+              label="Total run duration"
+              :value="Math.round(totalRunDuration*1000)/1000"
+            >
+              <template #suffix>s</template>
+            </n-statistic>
+            </n-flex>
+          </n-flex>
+        </n-card>
+        <n-data-table :columns="summaryColumns" :data="summaryData" />
+      </n-flex>
+    </script>
+    <script type="text/x-template" id="requests-component">
+      <n-card>
+        <template #header>
+          <span style="font-size: 24px;">{{ iterationTitle }}</span>
+        </template>
+        <n-flex vertical style="margin-bottom: 50px">
+          <n-switch
+            v-model:value="onlyFailed"
+            :rail-style="railStyle"
+          >
+            <template #checked> Only Failed </template>
+            <template #unchecked> Only Passed </template>
+          </n-switch>
+
+          <n-collapse>
+            <x-results-group v-for="(results, group) in groupedResults" :results="results" :group="group" :key="group + '-' + results.length"></x-results-group>
+          </n-collapse>
+        </n-flex>
+      </n-card>
+    </script>
+    <script type="text/x-template" id="results-group-component">
+      <n-collapse-item
+        :name="group"
+        arrow-placement="right"
+      >
+        <template #header>
+          <n-alert
+            :type="hasError || hasFailure ? 'error' : 'success'"
+            :bordered="false"
+          >
+            <template #header>
+              {{group}} - {{totalPassed}} / {{total}} Passed {{ hasError? " - Error" : "" }}
+            </template>
+          </n-alert>
+        </template>
+        <n-collapse>
+          <x-result v-for="(result, index) in results" :result="result" :group="group" :key="index"></x-result>
+        </n-collapse>
+      </n-collapse-item>
+    </script>
+    <script type="text/x-template" id="result-component">
+      <n-collapse-item
+        :name="name"
+        arrow-placement="right"
+      >
+        <template #header>
+          <n-alert
+            :type="hasError || hasFailure ? 'error' : 'success'"
+            :bordered="false"
+          >
+            <template #header>
+              {{suitename}} - {{totalPassed}} / {{total}} Passed {{hasError ? " - Error" : "" }}
+            </template>
+          </n-alert>
+        </template>
+        <n-flex vertical>
+          <n-grid x-gap="12" :cols="2">
+            <n-gi>
+              <n-card title="REQUEST INFORMATION">
+                <n-list>
+                  <n-list-item>
+                    <n-thing
+                      title="File"
+                      :description="result.test.filename"
+                    />
+                  </n-list-item>
+                  <n-list-item>
+                    <n-thing
+                      title="Request Method"
+                      :description="result.request.method"
+                    />
+                  </n-list-item>
+                  <n-list-item>
+                    <n-thing
+                      title="Request URL"
+                      :description="result.request.url"
+                    />
+                  </n-list-item>
+                </n-list>
+              </n-card>
+            </n-gi>
+            <n-gi>
+              <n-card title="RESPONSE INFORMATION">
+                <n-list>
+                  <n-list-item>
+                    <n-thing
+                      title="Response Code"
+                      :description="'' + result.response.status"
+                    />
+                  </n-list-item>
+                  <n-list-item>
+                    <n-thing
+                      title="Response time"
+                      :description="result.response.responseTime + ' ms'"
+                    />
+                  </n-list-item>
+                  <n-list-item>
+                    <n-thing
+                      title="Test duration"
+                      :description="testDuration"
+                    />
+                  </n-list-item>
+                </n-list>
+              </n-card>
+            </n-gi>
+          </n-grid>
+          <n-alert v-if="hasError" title="Error" type="error">
+            {{result.error}}
+          </n-alert>
+          <n-card title="REQUEST HEADERS">
+            <n-data-table
+              :columns="headerColumns"
+              :data="headerDataRequest"
+            />
+          </n-card>
+          <n-card
+            v-if="result.request.data"
+            title="REQUEST BODY"
+          >
+            <pre>{{result.request.data}}</pre>
+          </n-card>
+          <n-card title="RESPONSE HEADERS">
+            <n-data-table
+              :columns="headerColumns"
+              :data="headerDataResponse"
+            />
+          </n-card>
+          <n-card
+            v-if="result.response.data"
+            title="RESPONSE BODY"
+          >
+            <pre>{{result.response.data}}</pre>
+          </n-card>
+          <n-card title="ASSERTIONS INFORMATION">
+            <n-data-table
+              :columns="assertionsColumns"
+              :data="result.assertionResults"
+              :row-class-name="assertionsRowClassName"
+            />
+          </n-card>
+          <n-card title="TESTS INFORMATION">
+            <n-data-table
+              :columns="testsColumns"
+              :data="result.testResults"
+              :row-class-name="testsRowClassName"
+            />
+          </n-card>
+        </n-flex>
+      </n-collapse-item>
+    </script>
+    <script>
+      const { createApp, ref, computed } = Vue;
+
+      const App = {
+        setup() {
+          const res = [
+  {
+    "iterationIndex": 0,
+    "summary": {
+      "totalRequests": 3,
+      "passedRequests": 3,
+      "failedRequests": 0,
+      "totalAssertions": 10,
+      "passedAssertions": 10,
+      "failedAssertions": 0,
+      "totalTests": 1,
+      "passedTests": 1,
+      "failedTests": 0
+    },
+    "results": [
+      {
+        "test": {
+          "filename": "ReqRes/Users/List users.bru"
+        },
+        "request": {
+          "method": "GET",
+          "url": "https://reqres.in/api/users",
+          "headers": {}
+        },
+        "response": {
+          "status": 200,
+          "statusText": "OK",
+          "headers": {
+            "date": "Sat, 05 Oct 2024 16:48:11 GMT",
+            "content-type": "application/json; charset=utf-8",
+            "transfer-encoding": "chunked",
+            "connection": "close",
+            "report-to": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1728054606&sid=c4c9725f-1ab0-44d8-820f-430df2718e11&s=Kv3pJz8jDqQq5HdRvp2NRKp3z01JxH56xvPzdhSz324%3D\"}]}",
+            "reporting-endpoints": "heroku-nel=https://nel.heroku.com/reports?ts=1728054606&sid=c4c9725f-1ab0-44d8-820f-430df2718e11&s=Kv3pJz8jDqQq5HdRvp2NRKp3z01JxH56xvPzdhSz324%3D",
+            "nel": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}",
+            "x-powered-by": "Express",
+            "access-control-allow-origin": "*",
+            "etag": "W/\"3e4-2RLXvr5wTg9YQ6aH95CkYoFNuO8\"",
+            "via": "1.1 vegur",
+            "cache-control": "max-age=14400",
+            "cf-cache-status": "HIT",
+            "age": "624",
+            "vary": "Accept-Encoding",
+            "server": "cloudflare",
+            "cf-ray": "8cdee5d68e8bdd46-HKG"
+          },
+          "data": {
+            "page": 1,
+            "per_page": 6,
+            "total": 12,
+            "total_pages": 2,
+            "data": [
+              {
+                "id": 1,
+                "email": "george.bluth@reqres.in",
+                "first_name": "George",
+                "last_name": "Bluth",
+                "avatar": "https://reqres.in/img/faces/1-image.jpg"
+              },
+              {
+                "id": 2,
+                "email": "janet.weaver@reqres.in",
+                "first_name": "Janet",
+                "last_name": "Weaver",
+                "avatar": "https://reqres.in/img/faces/2-image.jpg"
+              },
+              {
+                "id": 3,
+                "email": "emma.wong@reqres.in",
+                "first_name": "Emma",
+                "last_name": "Wong",
+                "avatar": "https://reqres.in/img/faces/3-image.jpg"
+              },
+              {
+                "id": 4,
+                "email": "eve.holt@reqres.in",
+                "first_name": "Eve",
+                "last_name": "Holt",
+                "avatar": "https://reqres.in/img/faces/4-image.jpg"
+              },
+              {
+                "id": 5,
+                "email": "charles.morris@reqres.in",
+                "first_name": "Charles",
+                "last_name": "Morris",
+                "avatar": "https://reqres.in/img/faces/5-image.jpg"
+              },
+              {
+                "id": 6,
+                "email": "tracey.ramos@reqres.in",
+                "first_name": "Tracey",
+                "last_name": "Ramos",
+                "avatar": "https://reqres.in/img/faces/6-image.jpg"
+              }
+            ],
+            "support": {
+              "url": "https://reqres.in/#support-heading",
+              "text": "To keep ReqRes free, contributions towards server costs are appreciated!"
+            }
+          },
+          "responseTime": 73
+        },
+        "error": null,
+        "assertionResults": [
+          {
+            "uid": "ab7aALFBzhkHFBUGgU8Yh",
+            "lhsExpr": "res.status",
+            "rhsExpr": "eq 200",
+            "rhsOperand": "200",
+            "operator": "eq",
+            "status": "pass"
+          }
+        ],
+        "testResults": [
+          {
+            "description": "status is 200",
+            "status": "pass",
+            "uid": "-KVGzvpEYcay6G7ujMaaI"
+          }
+        ],
+        "runtime": 0.084512833,
+        "suitename": "ReqRes/Users/List users",
+        "iterationIndex": 0
+      },
+      {
+        "test": {
+          "filename": "ReqRes/Users/Single user.bru"
+        },
+        "request": {
+          "method": "GET",
+          "url": "https://reqres.in/api/users/2",
+          "headers": {
+            "Content-Type": "application/json"
+          }
+        },
+        "response": {
+          "status": 200,
+          "statusText": "OK",
+          "headers": {
+            "date": "Sat, 05 Oct 2024 16:48:11 GMT",
+            "content-type": "application/json; charset=utf-8",
+            "transfer-encoding": "chunked",
+            "connection": "close",
+            "report-to": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1727836801&sid=c4c9725f-1ab0-44d8-820f-430df2718e11&s=QdICiQrFcDh1skcjLlZuu5c38pnmYYqDSrn4UDlOZK4%3D\"}]}",
+            "reporting-endpoints": "heroku-nel=https://nel.heroku.com/reports?ts=1727836801&sid=c4c9725f-1ab0-44d8-820f-430df2718e11&s=QdICiQrFcDh1skcjLlZuu5c38pnmYYqDSrn4UDlOZK4%3D",
+            "nel": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}",
+            "x-powered-by": "Express",
+            "access-control-allow-origin": "*",
+            "etag": "W/\"118-pbdwwFo9SKNhD3Lx5iHJyngpq00\"",
+            "via": "1.1 vegur",
+            "cache-control": "max-age=14400",
+            "cf-cache-status": "HIT",
+            "age": "7105",
+            "vary": "Accept-Encoding",
+            "server": "cloudflare",
+            "cf-ray": "8cdee5d6e9ae5dff-HKG"
+          },
+          "data": {
+            "data": {
+              "id": 2,
+              "email": "janet.weaver@reqres.in",
+              "first_name": "Janet",
+              "last_name": "Weaver",
+              "avatar": "https://reqres.in/img/faces/2-image.jpg"
+            },
+            "support": {
+              "url": "https://reqres.in/#support-heading",
+              "text": "To keep ReqRes free, contributions towards server costs are appreciated!"
+            }
+          },
+          "responseTime": 46
+        },
+        "error": null,
+        "assertionResults": [
+          {
+            "uid": "uafNgpDQwUUlEqNMACf_T",
+            "lhsExpr": "res.status",
+            "rhsExpr": "eq 200",
+            "rhsOperand": "200",
+            "operator": "eq",
+            "status": "pass"
+          },
+          {
+            "uid": "T7chzvJDR0v4awUUH-D_R",
+            "lhsExpr": "res.body.data.id",
+            "rhsExpr": "eq 2",
+            "rhsOperand": "2",
+            "operator": "eq",
+            "status": "pass"
+          },
+          {
+            "uid": "V2WErwveZO19yPEgVWZTp",
+            "lhsExpr": "res.body.data.email",
+            "rhsExpr": "eq janet.weaver@reqres.in",
+            "rhsOperand": "janet.weaver@reqres.in",
+            "operator": "eq",
+            "status": "pass"
+          },
+          {
+            "uid": "VEGNPTkRIMokDKVINsw0c",
+            "lhsExpr": "res.body.data.first_name",
+            "rhsExpr": "eq Janet",
+            "rhsOperand": "Janet",
+            "operator": "eq",
+            "status": "pass"
+          },
+          {
+            "uid": "jev2aKv59S7SbOHWCYLYj",
+            "lhsExpr": "res.body.data.last_name",
+            "rhsExpr": "eq Weaver",
+            "rhsOperand": "Weaver",
+            "operator": "eq",
+            "status": "pass"
+          },
+          {
+            "uid": "ZUYiCOp7PJGTW-08dmmn-",
+            "lhsExpr": "res.body.data.avatar",
+            "rhsExpr": "eq https://reqres.in/img/faces/2-image.jpg",
+            "rhsOperand": "https://reqres.in/img/faces/2-image.jpg",
+            "operator": "eq",
+            "status": "pass"
+          }
+        ],
+        "testResults": [],
+        "runtime": 0.048078125,
+        "suitename": "ReqRes/Users/Single user",
+        "iterationIndex": 0
+      },
+      {
+        "test": {
+          "filename": "ReqRes/Users/Create user.bru"
+        },
+        "request": {
+          "method": "POST",
+          "url": "https://reqres.in/api/users",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "data": {
+            "name": "morpheus",
+            "job": "leader"
+          }
+        },
+        "response": {
+          "status": 201,
+          "statusText": "Created",
+          "headers": {
+            "date": "Sat, 05 Oct 2024 16:48:11 GMT",
+            "content-type": "application/json; charset=utf-8",
+            "content-length": "84",
+            "connection": "close",
+            "report-to": "{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1728146891&sid=c4c9725f-1ab0-44d8-820f-430df2718e11&s=ZAtmV0RULrYFs8HjI2ZsLlqt4x6iyytqsx%2Bf0OSS%2Bvs%3D\"}]}",
+            "reporting-endpoints": "heroku-nel=https://nel.heroku.com/reports?ts=1728146891&sid=c4c9725f-1ab0-44d8-820f-430df2718e11&s=ZAtmV0RULrYFs8HjI2ZsLlqt4x6iyytqsx%2Bf0OSS%2Bvs%3D",
+            "nel": "{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}",
+            "x-powered-by": "Express",
+            "access-control-allow-origin": "*",
+            "etag": "W/\"54-wi9Ch5qYYZyZZrvAi5t2LJWGILA\"",
+            "via": "1.1 vegur",
+            "cf-cache-status": "DYNAMIC",
+            "server": "cloudflare",
+            "cf-ray": "8cdee5d739870ef0-HKG"
+          },
+          "data": {
+            "name": "morpheus",
+            "job": "leader",
+            "id": "505",
+            "createdAt": "2024-10-05T16:48:11.752Z"
+          },
+          "responseTime": 500
+        },
+        "error": null,
+        "assertionResults": [
+          {
+            "uid": "XuszxiVXCL_U7E9x53Sbf",
+            "lhsExpr": "res.status",
+            "rhsExpr": "eq 201",
+            "rhsOperand": "201",
+            "operator": "eq",
+            "status": "pass"
+          },
+          {
+            "uid": "Oh9xr1VtEhboPf9xP-FUf",
+            "lhsExpr": "res.body.name",
+            "rhsExpr": "eq morpheus",
+            "rhsOperand": "morpheus",
+            "operator": "eq",
+            "status": "pass"
+          },
+          {
+            "uid": "1cB-oViPvqNHSOBFR5ZAt",
+            "lhsExpr": "res.body.job",
+            "rhsExpr": "eq leader",
+            "rhsOperand": "leader",
+            "operator": "eq",
+            "status": "pass"
+          }
+        ],
+        "testResults": [],
+        "runtime": 0.5042225,
+        "suitename": "ReqRes/Users/Create user",
+        "iterationIndex": 0
+      }
+    ]
+  }
+];
+
+          const darkMode = ref(false);
+          const theme = computed(() => {
+            return darkMode.value ? naive.darkTheme : null;
+          });
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            darkMode.value = true;
+          }
+          // To watch for os theme changes
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+            darkMode.value = event.matches;
+          });
+          return {
+            res,
+            theme,
+            darkMode,
+            darkModeRailStyle: () => ({ background: 'var(--n-rail-color)' })
+          };
+        }
+      };
+      const app = Vue.createApp(App);
+
+      app.component('x-summary', {
+        template: `#summary-component`,
+        props: ['res'],
+        setup(props) {
+          const summaryColumns = [
+            {
+              title: 'SUMMARY ITEM',
+              key: 'title'
+            },
+            {
+              title: 'TOTAL',
+              key: 'total'
+            },
+            {
+              title: 'PASSED',
+              key: 'passed'
+            },
+            {
+              title: 'FAILED',
+              key: 'failed'
+            }
+          ];
+          const summaryData = computed(() => [
+            {
+              title: 'Requests',
+              total: props.res.summary.totalRequests,
+              passed: props.res.summary.passedRequests,
+              failed: props.res.summary.failedRequests
+            },
+            {
+              title: 'Assertions',
+              total: props.res.summary.totalAssertions,
+              passed: props.res.summary.passedAssertions,
+              failed: props.res.summary.failedAssertions
+            },
+            {
+              title: 'Tests',
+              total: props.res.summary.totalTests,
+              passed: props.res.summary.passedTests,
+              failed: props.res.summary.failedTests
+            }
+          ]);
+          const summaryTotalRequests = computed(() => {
+            return props.res.summary.totalRequests;
+          });
+          const summaryTotalControls = computed(() => {
+            return props.res.summary.totalTests + props.res.summary.totalAssertions;
+          });
+          const summaryFailedControls = computed(
+            () => props.res.summary.failedRequests + props.res.summary.failedTests + props.res.summary.failedAssertions
+          );
+          const summaryErrors = computed(() => props.res.results.filter((r) => r.error).length);
+          const totalRunDuration = computed(() => props.res?.results?.reduce((total, test) => test.runtime + total, 0));
+          return {
+            summaryColumns,
+            summaryData,
+            summaryTotalControls,
+            summaryTotalRequests,
+            summaryFailedControls,
+            summaryErrors,
+            totalRunDuration,
+            iterationTitle: `Iteration ${props.res.iterationIndex + 1}`
+          };
+        }
+      });
+
+      app.component('x-requests', {
+        template: `#requests-component`,
+        props: ['res'],
+        setup(props) {
+          const onlyFailed = ref(false);
+          const filteredResults = computed(() => {
+            if (onlyFailed.value) {
+              return props.res.results.filter(
+                (r) =>
+                  !!r.error ||
+                  !!r.testResults.find((t) => t.status !== 'pass') ||
+                  !!r.assertionResults.find((t) => t.status !== 'pass')
+              );
+            }
+            return props.res.results;
+          });
+          const groupedResults = computed(() => {
+            return filteredResults.value.reduce((groups, curr) => {
+              const path = curr.suitename.split('/');
+              const test = path.pop();
+              const name = path.length ? path.join('/') : '(root)';
+              if (!groups[name]) {
+                groups[name] = [];
+              }
+              groups[name].push(curr);
+              return groups;
+            }, {});
+          });
+          return {
+            onlyFailed,
+            groupedResults,
+            railStyle: ({ checked }) => {
+              const style = {};
+              if (checked) {
+                style.background = '#d03050';
+              }
+              return style;
+            },
+            iterationTitle: `Iteration ${props.res.iterationIndex + 1}`
+          };
+        }
+      });
+
+      app.component('x-results-group', {
+        template: `#results-group-component`,
+        props: ['group', 'results'],
+        setup(props) {
+          const totalPassed = computed(() => {
+            return props.results.reduce((total, curr) => {
+              return (
+                total +
+                curr.testResults.filter((t) => t.status === 'pass').length +
+                curr.assertionResults.filter((t) => t.status === 'pass').length
+              );
+            }, 0);
+          });
+          const total = computed(() => {
+            return props.results.reduce((total, curr) => {
+              return total + curr.testResults.length + curr.assertionResults.length;
+            }, 0);
+          });
+
+          const hasError = computed(() => props.results.some((r) => !!r.error));
+          const hasFailure = computed(() => totalPassed.value !== total.value);
+          return {
+            totalPassed,
+            total,
+            hasFailure,
+            hasError,
+            group: props.group,
+            results: props.results
+          };
+        }
+      });
+
+      app.component('x-result', {
+        template: `#result-component`,
+        props: ['group', 'result'],
+        setup(props) {
+          const headerColumns = [
+            {
+              title: 'Header Name',
+              key: 'name',
+              className: 'min-width-150'
+            },
+            {
+              title: 'Header Value',
+              key: 'value'
+            }
+          ];
+          const assertionsColumns = [
+            {
+              title: 'Expression',
+              key: 'lhsExpr'
+            },
+            {
+              title: 'Operator',
+              key: 'operator'
+            },
+            {
+              title: 'Operand',
+              key: 'rhsOperand'
+            },
+            {
+              title: 'Status',
+              key: 'status',
+              className: 'status'
+            },
+            {
+              title: 'Error',
+              key: 'error'
+            }
+          ];
+          const assertionsRowClassName = (row) => {
+            return row.status === 'fail' ? 'error' : 'success';
+          };
+          const testsRowClassName = (row) => {
+            return row.status === 'fail' ? 'error' : 'success';
+          };
+          const testsColumns = [
+            {
+              title: 'Description',
+              key: 'description'
+            },
+            {
+              title: 'Status',
+              key: 'status',
+              className: 'status'
+            },
+            {
+              title: 'Error',
+              key: 'error'
+            }
+          ];
+
+          function mapHeaderToTableData(headers) {
+            if (!headers) {
+              return [];
+            }
+            return Object.keys(headers).map((name) => ({
+              name,
+              value: headers[name]
+            }));
+          }
+          const headerDataRequest = computed(() => {
+            return mapHeaderToTableData(props.result.request.headers);
+          });
+          const headerDataResponse = computed(() => {
+            return mapHeaderToTableData(props.result.response.headers);
+          });
+          const totalPassed = computed(() => {
+            return (
+              props.result.testResults.filter((t) => t.status === 'pass').length +
+              props.result.assertionResults.filter((t) => t.status === 'pass').length
+            );
+          });
+          const total = computed(() => {
+            return props.result.testResults.length + props.result.assertionResults.length;
+          });
+
+          const hasError = computed(() => !!props.result.error);
+          const hasFailure = computed(() => total.value !== totalPassed.value);
+          const suitename = computed(() => props.result.suitename.replace(props.group + '/', ''));
+          const testDuration = computed(() => Math.round(props.result.runtime * 1000) + ' ms');
+          const name = computed(() => props.result.suitename + props.result.runtime);
+          return {
+            headerColumns,
+            headerDataRequest,
+            headerDataResponse,
+            assertionsColumns,
+            assertionsRowClassName,
+            testsRowClassName,
+            totalPassed,
+            total,
+            hasFailure,
+            hasError,
+            testsColumns,
+            result: props.result,
+            suitename,
+            testDuration,
+            name,
+            iterationIndex: props.result.iterationIndex
+          };
+        }
+      });
+
+      app.use(naive);
+      app.mount('#app');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+meta {
+  name: Single user
+  type: http
+  seq: 3
+}
+
+get {
+  url: https://reqres.in/api/users/2
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+assert {
+  res.status: eq 200
+  res.body.data.id: eq 2
+  res.body.data.email: eq janet.weaver@reqres.in
+  res.body.data.first_name: eq Janet
+  res.body.data.last_name: eq Weaver
+  res.body.data.avatar: eq https://reqres.in/img/faces/2-image.jpg
+}

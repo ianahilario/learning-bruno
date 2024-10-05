@@ -1,0 +1,11 @@
+{
+  "name": "learning-bruno",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "bru run"
+  },
+  "author": "",
+  "license": "ISC"
+}

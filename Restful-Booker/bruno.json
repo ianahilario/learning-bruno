@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Restful-Booker",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
